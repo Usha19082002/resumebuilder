@@ -1,37 +1,76 @@
-import React from 'react'
-import {Routes, Route ,Navigate} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import DetailsFillingPage from './Components/DetailsFillComponents/DetailsFillingPage';
-import Home from './Components/HomePage/Home'
-import NavBar from './Components/Navigation/Navbar'
+import Home from './Components/HomePage/Home';
+import NavBar from './Components/Navigation/Navbar';
 import MyResume from './Components/ResumeDisplay/MyResume';
 import AboutUs from './Components/AboutUs/AboutUs';
+import Login from './Components/Login/login';
 import './App.css';
-import Login_page from './Login/login_page';
 
-//'about' displays the AboutUs page of the app.
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
   return (
     <div>
-        {/* <Login_page/> */}
+      <div>
+        <NavBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+      </div>
 
-        <div> 
-          <NavBar/>
-        </div>
-        
+      <div>
+      <Routes>
+  <Route path="/login" element={<Login onLogin={handleLogin} />} />
+  <Route
+    path="/detailsfillingpage/*"
+    element={
+      isAuthenticated ? (
+        <DetailsFillingPage />
+      ) : (
         <div>
-            <Routes>
-                  <Route exact path="/" element={<Home/>}></Route>
-                  <Route path="/detailsfillingpage/*" element ={<DetailsFillingPage />}></Route> 
-                  <Route path="/myresume" element={<MyResume/>}></Route>
-                  <Route exact path="/about" element={<AboutUs/>}></Route>
-                  <Route path="*" element={<Navigate to="/about" />}></Route>
-            </Routes> 
+          <p>Please login to access this page.</p>
+          <Navigate to="/login" />
         </div>
+      )
+    }
+  />
+  <Route
+    path="/myresume"
+    element={
+      isAuthenticated ? (
+        <MyResume />
+      ) : (
+        <div>
+          <p>Please login to access this page.</p>
+          <Navigate to="/login" />
+        </div>
+      )
+    }
+  />
+  <Route exact path="/about" element={<AboutUs />} />
+  <Route
+    exact
+    path="/"
+    element={
+      isAuthenticated ? (
+        <Home />
+      ) : (
+        <div>
+          <p>Please login to access this page.</p>
+          <Navigate to="/login" />
+        </div>
+      )
+    }
+  />
+  <Route path="*" element={<Navigate to="/about" />} />
+</Routes>
+
+      </div>
     </div>
-  )
+  );
 }
 
-
-export default App
-
-
+export default App;

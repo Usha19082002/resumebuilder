@@ -43,7 +43,7 @@ function BottomNavigation(props) {
                 }
               }}
             >
-              {window.location.pathname === "/detailsfillingpage/keyskills" 
+              {window.location.pathname === "/detailsfillingpage/keyskills" //this condition changes the name of the 'next' button as 'preview' when the user reaches 'keySkills' page.
                 ? 'Preview'
                 : 'Next'}
             </button>
